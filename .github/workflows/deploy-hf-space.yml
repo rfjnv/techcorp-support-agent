@@ -1,0 +1,50 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Upload to HF Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          pip install -q huggingface_hub
+          python << 'PY'
+          import os
+          from huggingface_hub import HfApi
+
+          token = os.environ.get("HF_TOKEN", "")
+          if not token:
+              raise SystemExit(
+                  "HF_TOKEN secret missing. Add a Classic WRITE token at:\n"
+                  "https://github.com/rfjnv/techcorp-support-agent/settings/secrets/actions"
+              )
+
+          api = HfApi(token=token)
+          api.upload_folder(
+              folder_path=".",
+              repo_id="ynchzx/techcorp-support-agent",
+              repo_type="space",
+              commit_message="Deploy TechCorp support agent",
+              ignore_patterns=[
+                  ".git/**",
+                  ".github/**",
+                  "data/chroma_db/**",
+                  "**/__pycache__/**",
+                  ".env",
+                  "deploy*.ps1",
+              ],
+          )
+          print("Deployed to https://huggingface.co/spaces/ynchzx/techcorp-support-agent")
+          PY
