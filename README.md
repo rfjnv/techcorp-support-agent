@@ -1,14 +1,18 @@
 ---
-title: Techcorp Support Agent
-emoji: 📉
-colorFrom: indigo
-colorTo: indigo
+title: TechCorp Support Agent
+emoji: 🤖
+colorFrom: blue
+colorTo: cyan
 sdk: gradio
-sdk_version: 6.14.0
-python_version: '3.13'
+sdk_version: 4.44.0
 app_file: app.py
 pinned: false
-short_description: techcorp-support-agent
+license: mit
+short_description: RAG customer support chatbot for TechCorp
 ---
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+# TechCorp Customer Support Agent
+
+RAG-powered support chatbot with Claude AI, ChromaDB document search, and GitHub Issues for tickets.
+
+Set `ANTHROPIC_API_KEY` (and optional `GITHUB_TOKEN`, `GITHUB_REPO`) in Space secrets.
